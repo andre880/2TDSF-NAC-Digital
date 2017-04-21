@@ -15,7 +15,7 @@ public class JogoDAOImpl extends GenericDAOImpl<Jogo, Long> implements JogoDAO {
 
 	@Override
 	public List<Jogo> listar() {
-		return em.createQuery("from T_NAC_JOGO", Jogo.class).getResultList();
+		return em.createQuery("from Jogo", Jogo.class).getResultList();
 	}
 
 }

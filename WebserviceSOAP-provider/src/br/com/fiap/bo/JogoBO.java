@@ -1,5 +1,8 @@
 package br.com.fiap.bo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.apache.axis2.AxisFault;
@@ -24,25 +27,41 @@ public class JogoBO {
 			em.close();
 		}
 	}
-	
-	public Jogo buscar(long id) throws AxisFault{
+
+	public Jogo buscar(long id) throws AxisFault {
 		EntityManager em = EntityManagerFactorySingleton.getInst().createEntityManager();
 		JogoDAO dao = new JogoDAOImpl(em);
-		
+
 		Jogo jogo = null;
-		
+
 		try {
 			jogo = dao.buscar(id);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AxisFault("Erro ao buscar jogo");
-		}finally {
+		} finally {
+			em.close();
+		}
+
+		return jogo;
+	}	
+	
+	public List<Jogo> listar() throws AxisFault {
+		EntityManager em = EntityManagerFactorySingleton.getInst().createEntityManager();
+		JogoDAO dao = new JogoDAOImpl(em);
+		
+		List<Jogo> jogos = null;
+
+		try {
+			jogos = dao.listar();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new AxisFault("Erro ao listar jogos");
+		} finally {
 			em.close();
 		}
 		
-		return jogo;		
+		return jogos;
 	}
-	
-	//fazer o listar
 
 }
