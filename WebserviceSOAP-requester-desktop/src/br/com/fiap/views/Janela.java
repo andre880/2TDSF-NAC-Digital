@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public class Janela {
-
+	
 	protected Shell shlWebservicesoaprequesterdesktop;
 	private Text edtTitulo;
 	private Text edtGenero;
@@ -56,10 +56,10 @@ public class Janela {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		shlWebservicesoaprequesterdesktop = new Shell();
+		shlWebservicesoaprequesterdesktop = new Shell(SWT.SHELL_TRIM & (~SWT.RESIZE));
 		shlWebservicesoaprequesterdesktop.setSize(488, 659);
 		shlWebservicesoaprequesterdesktop.setText("WebserviceSOAP-requester-desktop");
-		shlWebservicesoaprequesterdesktop.setLayout(new GridLayout(2, false));
+		shlWebservicesoaprequesterdesktop.setLayout(new GridLayout(2, false));		
 		
 		Label lblCadastrar = new Label(shlWebservicesoaprequesterdesktop, SWT.NONE);
 		lblCadastrar.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
