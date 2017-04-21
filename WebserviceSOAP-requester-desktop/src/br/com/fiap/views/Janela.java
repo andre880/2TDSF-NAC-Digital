@@ -2,8 +2,12 @@ package br.com.fiap.views;
 
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.axis2.AxisFault;
 import org.eclipse.swt.SWT;
@@ -19,6 +23,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -27,6 +32,8 @@ import br.com.fiap.bo.JogoBOStub.Buscar;
 import br.com.fiap.bo.JogoBOStub.BuscarResponse;
 import br.com.fiap.bo.JogoBOStub.Cadastrar;
 import br.com.fiap.bo.JogoBOStub.Jogo;
+import br.com.fiap.bo.JogoBOStub.Listar;
+import br.com.fiap.bo.JogoBOStub.ListarResponse;
 
 public class Janela {
 
@@ -294,6 +301,56 @@ public class Janela {
 		btnListar.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				
+				Display.getCurrent().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						
+						btnListar.setEnabled(false);
+						
+						table.removeAll();
+						
+						try {
+							
+							JogoBOStub stub = new JogoBOStub();
+							Listar listar = new Listar();
+							ListarResponse response = stub.listar(listar);
+							List<Jogo> lista = Arrays.asList(response.get_return());
+							Collections.sort(lista, new Comparator<Jogo>() {
+
+								@Override
+								public int compare(Jogo o1, Jogo o2) {
+									if(o1.getId() < o2.getId()) return -1;
+									if(o1.getId() > o2.getId()) return 1;
+									return 0;
+								}
+							});
+							
+							if(lista == null || lista.size() == 0){
+								mensagem("Listar", "Não foi possível listar");
+							}else{
+								for (Jogo jogo : lista) {
+									TableItem tableItem= new TableItem(table, SWT.NONE);									
+									tableItem.setText(new String[]{ 
+											String.valueOf(jogo.getId()), 
+											jogo.getTitulo(), 
+											new SimpleDateFormat("dd/MM/yyyy").format(jogo.getDataLancamento().getTime()),
+											jogo.getGenero(),
+											jogo.getDescricao()});																	
+								}
+							}
+							
+						} catch (Exception e2) {
+							e2.printStackTrace();
+							mensagem("Listar", e2.getMessage());
+						}finally {
+							btnListar.setEnabled(true);
+						}
+						
+					}
+				});
+				
 			}
 		});
 		btnListar.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
