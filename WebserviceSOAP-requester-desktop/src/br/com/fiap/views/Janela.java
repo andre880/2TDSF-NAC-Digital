@@ -1,5 +1,10 @@
 package br.com.fiap.views;
 
+import java.rmi.RemoteException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import org.apache.axis2.AxisFault;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -9,11 +14,16 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import br.com.fiap.bo.JogoBOStub;
+import br.com.fiap.bo.JogoBOStub.Cadastrar;
+import br.com.fiap.bo.JogoBOStub.Jogo;
 
 public class Janela {
 	
@@ -100,9 +110,50 @@ public class Janela {
 		Button btnCadastrar = new Button(shlWebservicesoaprequesterdesktop, SWT.NONE);
 		btnCadastrar.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent e) {				
 				
+				btnCadastrar.setEnabled(false);
 				
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						
+						try {
+							
+							
+							String titulo = edtTitulo.getText();
+							String genero = edtGenero.getText();
+							String descricao = edtDescricao.getText();
+							int dia = dateTime.getDay();
+							int mes = dateTime.getMonth();
+							int ano = dateTime.getYear();
+							Calendar dataLancamento = new GregorianCalendar(ano, mes, dia);
+							
+							JogoBOStub stub = new JogoBOStub();
+							Jogo jogo = new Jogo();
+							jogo.setId(0);
+							jogo.setTitulo(titulo);
+							jogo.setGenero(genero);
+							jogo.setDescricao(descricao);
+							jogo.setDataLancamento(dataLancamento);
+							Cadastrar cadastrar = new Cadastrar();
+							cadastrar.setEntity(jogo);
+							stub.cadastrar(cadastrar);
+							
+							mensagem("Cadastrar", "Cadastro realizado com sucesso!");
+						} catch (AxisFault e1) {					
+							e1.printStackTrace();
+							mensagem("Erro", e1.getMessage());
+						} catch (RemoteException e1) {					
+							e1.printStackTrace();
+							mensagem("Erro", e1.getMessage());
+						}finally {
+							btnCadastrar.setEnabled(true);
+						}
+						
+					}
+				});				
 				
 			}
 		});
@@ -206,4 +257,12 @@ public class Janela {
 		btnListar.setText("Listar");
 
 	}
+	
+	private void mensagem(String title, String msg){
+		MessageBox mBox = new MessageBox(shlWebservicesoaprequesterdesktop, SWT.OK);
+		mBox.setText(title);
+		mBox.setMessage(msg);
+		mBox.open();
+	}
+	
 }
