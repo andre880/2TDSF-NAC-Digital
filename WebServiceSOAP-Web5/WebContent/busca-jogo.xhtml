@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+		<ui:composition template="_template.xhtml">
+	<ui:define name="conteudo">
+		<div class="row">
+			<div class="col-md-6">
+				<h1>Buscar o Jogo</h1>
+				<h:form>
+					<div class="form-group">
+						<h:outputLabel value="Codigo" for="codigo" />
+						<h:inputText styleClass="form-control"
+							value="#{buscaJogoBean.codigo}" id="codigo" />
+					</div>
+					<div class="form-group">
+						<h:commandButton styleClass="btn btn-primary"
+							action="#{buscaJogoBean.buscar()}" value="Buscar" />
+					</div>
+				</h:form>
+			</div>
+			<div class="col-md-6">
+				<h2>Lista</h2>
+				<h:outputText value="#{buscaJogoBean.jogo.titulo}" />
+				<br />
+				<h:outputText value="#{buscaJogoBean.jogo.dataLancamento}" />
+				<br />
+				<h:outputText value="#{buscaJogoBean.jogo.genero}" />
+				<br />
+				<h:outputText value="#{buscaJogoBean.jogo.descricao}" />
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>
