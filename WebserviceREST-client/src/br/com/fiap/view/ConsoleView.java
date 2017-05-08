@@ -36,14 +36,14 @@ public class ConsoleView {
 				buscar();
 				break;
 
-			case 3: // buscar
+			case 3: // alterar
 				alterar();
 				break;
 				
-			case 4: // buscar
+			case 4: // listar
 				listar();
 				break;
-			case 5: // buscar
+			case 5: // exluir
 				excluir();
 				break;
 			default:
@@ -161,7 +161,7 @@ public class ConsoleView {
 	}
 
 	public static int menu() {
-		String[] menu = { "\t\t MENU \t\t", "1-Cadastrar", "2-Buscar","3-Alterar","4-Excluir", "0-Sair" };
+		String[] menu = { "\t\t MENU \t\t", "1-Cadastrar", "2-Buscar","3-Alterar","4-Listar","5-Excluir", "0-Sair" };
 		for (String op : menu) {
 			System.out.println(op);
 		}
